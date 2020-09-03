@@ -4,6 +4,7 @@ class CreateFriendships < ActiveRecord::Migration[5.2]
       #do a test with this configuration, used create_likes as reference. Remember the problem you had with adding foreign_keys instantly
       t.integer :friend1_id
       t.integer :friend2_id
+      t.boolean :status
       t.timestamps
     end
     add_foreign_key :friendships, :users, column: :friend1_id
