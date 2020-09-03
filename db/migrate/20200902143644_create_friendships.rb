@@ -7,6 +7,8 @@ class CreateFriendships < ActiveRecord::Migration[5.2]
       t.boolean :status
       t.timestamps
     end
+    add_index :friendships, :friend1_id
+    add_index :friendships, :friend2_id
     add_foreign_key :friendships, :users, column: :friend1_id
     add_foreign_key :friendships, :users, column: :friend2_id
   end

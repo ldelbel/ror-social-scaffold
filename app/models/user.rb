@@ -6,9 +6,16 @@ class User < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 20 }
 
-  has_many :friendships, -> (user) {where "friend1_id = ? OR friend2_id = ?", user.id, user.id }
-  has_many :friends, through: :friendships
+  has_many :friendships_as_requester, foreign_key: 'friend1_id', class_name: 'Friendship'
+  has_many :friendships_as_receiver, foreign_key: 'friend2_id', class_name: 'Friendship'
+  has_many :friends2, through: :friendships_as_requester, source: :friend2
+  has_many :friends1, through: :friendships_as_receiver, source: :friend1
+
   has_many :posts
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
+
+  def friends
+    friends1 + friends2
+  end
 end
