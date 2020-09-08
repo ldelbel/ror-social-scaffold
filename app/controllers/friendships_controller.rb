@@ -8,7 +8,13 @@ class FriendshipsController < ApplicationController
   end
 
   def create
-    @friendship_send_request = current_user.friendships_as_requester.create!(status: false)
+    @friendship_send_request = current_user.friendships_as_requester.create(friend2_id: params[:friend2_id], status: false)
+    if @friendship_send_request.save
+      flash[:notice] = 'Invitation sent successfully'
+    else
+      flash[:alert] = 'Something went wrong'
+    end
+    redirect_to users_path
   end
 
   def edit
