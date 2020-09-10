@@ -1,7 +1,7 @@
 <h2>Friend Requests</h2>
 
 <ul>
-<% @user.friendships_as_receiver.select do |friendship| %>
+<% @user.friendships_as_receiver.where(status: false).select do |friendship| %>
 
 <li><%= friendship.friend1.name %> wants to be your friend</li>
 
@@ -12,6 +12,7 @@
 
 <%= form_for friendship, url: user_friendship_path(user_id: @user.id, id: friendship.id), method: :delete do |t| -%>
   <%= t.hidden_field :id, value: @user.id -%>
+  <%= t.hidden_field :operation, value: 'receive' -%>
   <%= t.submit 'Decline' -%>
 <%- end -%>
 <% end %>
