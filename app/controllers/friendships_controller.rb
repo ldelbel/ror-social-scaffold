@@ -34,31 +34,31 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
-    if params.has_value?('receive')
+    if params[:friendship][:operation].eql?('receive')
       @friendship = current_user.friendships_as_receiver.find(params[:id])
       @friendship.destroy
-      if @friendship.save
+      if @friendship.destroy()
         flash[:alert] = 'You declined the invitation'
-        render :index
+        redirect_to request.referrer
       else
         flash[:notice] = 'Something went wrong'
       end
-    elsif params.has_value?('send') 
-      @friendship = current_user.friendships_as_requester.find_by(friend1_id: current_user.id, friend2_id: params[:id])
+    elsif params[:friendship][:operation].eql?('send') 
+      @friendship = current_user.friendships_as_requester.find_by(friend1_id: current_user.id, friend2_id: params[:friendship][:friend2_id])
       friend = @friendship.friend2_id
       @friendship.destroy
-      if @friendship
-        flash[:notice] = 'Something went wrong'
-      else
+      if @friendship.destroy()
         flash[:alert] = 'You canceled the invitation'
-        redirect_to users_path
+        redirect_to request.referrer 
+      else
+        flash[:notice] = 'Something went wrong'
       end
     else
       @friendship = Friendship.find(params[:id])
       friend = @friendship.friend1_id
       @friendship.destroy
-      flash[:alert] = 'You third '
-      redirect_to users_path
+      flash[:alert] = 'Unfriended Successfully'
+      redirect_to request.referrer
     end
   end
 end

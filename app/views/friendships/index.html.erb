@@ -11,7 +11,7 @@
 <%- end -%>
 
 <%= form_for friendship, url: user_friendship_path(user_id: @user.id, id: friendship.id), method: :delete do |t| -%>
-  <%= t.hidden_field :id, value: @user.id -%>
+  <%= t.hidden_field :id, value: friendship.id -%>
   <%= t.hidden_field :operation, value: 'receive' -%>
   <%= t.submit 'Decline' -%>
 <%- end -%>
