@@ -45,7 +45,6 @@ class FriendshipsController < ApplicationController
       end
     elsif params[:friendship][:operation].eql?('send') 
       @friendship = current_user.friendships_as_requester.find_by(friend1_id: current_user.id, friend2_id: params[:friendship][:friend2_id])
-      friend = @friendship.friend2_id
       @friendship.destroy
       if @friendship.destroy()
         flash[:alert] = 'You canceled the invitation'
@@ -55,7 +54,6 @@ class FriendshipsController < ApplicationController
       end
     else
       @friendship = Friendship.find(params[:id])
-      friend = @friendship.friend1_id
       @friendship.destroy
       flash[:alert] = 'Unfriended Successfully'
       redirect_to request.referrer
