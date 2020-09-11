@@ -19,7 +19,6 @@ module ApplicationHelper
   def friendship_button(user,friend)
     @current_user = user
     @user = friend
-    html = ""
     sent = Friendship.where(friend1_id: user.id, friend2_id: friend.id)
     received = Friendship.where(friend1_id: friend.id, friend2_id: user.id)
     received_accepted = received.first.status.eql?(true) if !received.empty?
