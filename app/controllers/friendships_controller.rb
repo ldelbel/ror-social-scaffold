@@ -19,7 +19,6 @@ class FriendshipsController < ApplicationController
 
   def edit
     @user = current_user
-    
   end
   
   def update
@@ -44,16 +43,22 @@ class FriendshipsController < ApplicationController
       else
         flash[:notice] = 'Something went wrong'
       end
-    elsif params.has_value?('send')
+    elsif params.has_value?('send') 
       @friendship = current_user.friendships_as_requester.find_by(friend1_id: current_user.id, friend2_id: params[:id])
       friend = @friendship.friend2_id
       @friendship.destroy
       if @friendship
         flash[:notice] = 'Something went wrong'
       else
-        flash[:alert] = 'You declined the invitation'
-        redirect_to user_path(friend)
+        flash[:alert] = 'You canceled the invitation'
+        redirect_to users_path
       end
+    else
+      @friendship = Friendship.find(params[:id])
+      friend = @friendship.friend1_id
+      @friendship.destroy
+      flash[:alert] = 'You third '
+      redirect_to users_path
     end
   end
- end
+end

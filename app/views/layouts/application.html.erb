@@ -24,7 +24,7 @@
         </div>
         <div class="menu-item">
           <% if current_user %>
-            <%= menu_link_to 'Your friends', user_friendships_path(current_user) %>
+            <%= menu_link_to 'Your friends', user_friends_path(current_user) %>
           <% end %>
         </div>
       </div>

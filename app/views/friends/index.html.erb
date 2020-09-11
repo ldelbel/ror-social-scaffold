@@ -1,0 +1,14 @@
+<h2>Your Friends</h2>
+
+<ul>
+<% @user_friends.each do |id| %>
+  <% friend = User.find(id) %>
+  <% friendship = Friendship.find_by('friend1_id IN (?) AND friend2_id IN (?)', [@user.id, id],[@user.id, id])  %>
+  <li><%= friend.name %></li>
+
+  <%= form_for friendship, url: user_friendship_path(user_id: @user.id, id: friendship.id), method: :delete do |t| -%>
+    <%= t.hidden_field :id, value: friendship.id -%>
+    <%= t.submit 'Unfriend' -%>
+  <%- end -%>
+<% end %>
+</ul>

@@ -15,7 +15,7 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
 
-  def friends
-    friends1 + friends2
-  end
+  # def friends
+  #   friends1 + friends2
+  # end
 end

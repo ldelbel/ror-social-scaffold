@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     resources :friendships do
       put 'update'
     end
+    resources :friends, only: [:index]
   end
 
   resources :posts, only: [:index, :create] do
