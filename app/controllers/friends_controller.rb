@@ -1,4 +1,6 @@
 class FriendsController < ApplicationController
+  before_action :authenticate_user!
+  
   def index
     @user = current_user
     @user_friends1 = current_user.friendships_as_requester.where(status: true).pluck(:friend2_id)

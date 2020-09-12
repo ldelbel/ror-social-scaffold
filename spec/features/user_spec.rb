@@ -7,6 +7,7 @@ RSpec.describe 'Users', type: :feature do
     context 'when user add valid inputs' do
       before do
         DatabaseCleaner.clean
+        User.create(name: 'Lucas')
         visit '/users/sign_up'
         fill_in 'user_name', with: 'Delbel'
         fill_in 'user_email', with: 'del@bel.com'
@@ -24,6 +25,13 @@ RSpec.describe 'Users', type: :feature do
       end
 
       it 'register user in All Users' do
+        click_link 'Sign out'
+        visit '/users/sign_up'
+        fill_in 'user_name', with: 'Lucas'
+        fill_in 'user_email', with: 'luc@as.com'
+        fill_in 'user_password', with: '123456'
+        fill_in 'user_password_confirmation', with: '123456'
+        click_on 'commit'
         visit '/users'
         expect(page).to have_content('Delbel')      
       end
