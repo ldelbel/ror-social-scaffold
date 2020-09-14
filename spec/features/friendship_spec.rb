@@ -68,7 +68,6 @@ RSpec.describe 'Friendships', type: :feature do
 
     context 'when user clicks on Check Pending Request button in All Users' do
       before do
-        #simulates logout user 1 -> login user2 -> send friend request to user1 -> logout -> login user1 -> check request
         create_login_lucas_send
         signout_login_delbel
         visit '/users'
