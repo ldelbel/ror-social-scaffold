@@ -12,22 +12,22 @@ RSpec.describe 'Friendship', type: :request do
 
   let(:signin) do
     get '/users/sign_in'
-    post '/users', params: { user: {id: 1, email: 'lucas@lucas.com', password: '123456' } }
+    post '/users', params: { user: { id: 1, email: 'lucas@lucas.com', password: '123456' } }
   end
 
-  context 'when user tries to access friendships without signing in' do 
+  context 'when user tries to access friendships without signing in' do
     it 'redirects to signin page' do
       get user_friendships_path(1)
       expect(response).to redirect_to('/users/sign_in')
     end
   end
 
-  context 'when user tries to access friendships page signed in' do 
+  context 'when user tries to access friendships page signed in' do
     before do
       signup
       signin
     end
-    
+
     it 'opens page' do
       get user_friendships_path(1)
       expect(response).to have_http_status(:ok)

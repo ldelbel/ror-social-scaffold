@@ -1,10 +1,9 @@
 require 'rails_helper'
 require 'database_cleaner'
 
-
 RSpec.describe 'Friendships', type: :feature do
   describe 'friendship_buttons' do
-    let(:create_login_lucas_send){
+    let(:create_login_lucas_send) do
       DatabaseCleaner.clean
       User.create(name: 'Lucas', email: 'luc@as.com', password: '123456', password_confirmation: '123456')
       User.create(name: 'Delbel', email: 'del@bel.com', password: '123456', password_confirmation: '123456')
@@ -14,20 +13,20 @@ RSpec.describe 'Friendships', type: :feature do
       click_on 'commit'
       visit '/users'
       click_on 'Send Invitation'
-    }
+    end
 
-    let(:signout_login_delbel){
+    let(:signout_login_delbel) do
       click_link 'Sign out'
       visit '/users/sign_in'
       fill_in 'user_email', with: 'del@bel.com'
       fill_in 'user_password', with: '123456'
       click_on 'commit'
-    }
-    
-    context 'when user clicks on Send Invitation button in All Users' do  
+    end
+
+    context 'when user clicks on Send Invitation button in All Users' do
       before do
         create_login_lucas_send
-      end  
+      end
 
       it 'Changes the button content to Cancel Invitation' do
         expect(page).to have_button('Cancel Invitation')
@@ -47,9 +46,9 @@ RSpec.describe 'Friendships', type: :feature do
     context 'when user clicks on Cancel Invitation button in All Users' do
       before do
         create_login_lucas_send
-          click_on 'Cancel Invitation'
-      end  
-    
+        click_on 'Cancel Invitation'
+      end
+
       it 'Changes the button content to Send Invitation' do
         expect(page).to have_button('Send Invitation')
       end
@@ -82,7 +81,7 @@ RSpec.describe 'Friendships', type: :feature do
         expect(page).to have_button('Accept')
         expect(page).to have_button('Decline')
       end
-    end 
+    end
 
     context 'when user accepts friendship' do
       before do
@@ -97,7 +96,6 @@ RSpec.describe 'Friendships', type: :feature do
         expect(page).to have_content 'Lucas'
         expect(page).to have_button 'Unfriend'
       end
-    
 
       it 'creates friend in other user\'s account' do
         click_link 'Sign out'
@@ -106,8 +104,8 @@ RSpec.describe 'Friendships', type: :feature do
         fill_in 'user_password', with: '123456'
         click_on 'commit'
         visit '/users/1/friends'
-        expect(page).to have_content 'Delbel'  
-        expect(page).to have_button 'Unfriend'        
+        expect(page).to have_content 'Delbel'
+        expect(page).to have_button 'Unfriend'
       end
     end
   end
