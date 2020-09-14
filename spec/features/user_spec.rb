@@ -4,16 +4,38 @@ require 'database_cleaner'
 
 RSpec.describe 'Users', type: :feature do
   describe 'Sign Up' do
-    context 'when user add valid inputs' do
-      before do
-        DatabaseCleaner.clean
-        User.create(name: 'Lucas')
+    let(:create_and_fill_delbel) {
+      DatabaseCleaner.clean
+      User.create(name: 'Lucas')
+      visit '/users/sign_up'
+      fill_in 'user_name', with: 'Delbel'
+      fill_in 'user_email', with: 'del@bel.com'
+      fill_in 'user_password', with: '123456'
+      fill_in 'user_password_confirmation', with: '123456'
+      click_on 'commit'
+    }
+
+    let(:signout_login_lucas){
+      click_link 'Sign out'
+      visit '/users/sign_up'
+      fill_in 'user_name', with: 'Lucas'
+      fill_in 'user_email', with: 'luc@as.com'
+      fill_in 'user_password', with: '123456'
+      fill_in 'user_password_confirmation', with: '123456'
+      click_on 'commit'
+      visit '/users'
+    }
+    
+    let(:signup_name_delbel){
+      DatabaseCleaner.clean
         visit '/users/sign_up'
         fill_in 'user_name', with: 'Delbel'
         fill_in 'user_email', with: 'del@bel.com'
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '123456'
-        click_on 'commit'
+    }
+
+    context 'when user add valid inputs' do
+      before do
+        create_and_fill_delbel
       end
 
       it 'signs in' do
@@ -25,24 +47,14 @@ RSpec.describe 'Users', type: :feature do
       end
 
       it 'register user in All Users' do
-        click_link 'Sign out'
-        visit '/users/sign_up'
-        fill_in 'user_name', with: 'Lucas'
-        fill_in 'user_email', with: 'luc@as.com'
-        fill_in 'user_password', with: '123456'
-        fill_in 'user_password_confirmation', with: '123456'
-        click_on 'commit'
-        visit '/users'
+        signout_login_lucas
         expect(page).to have_content('Delbel')      
       end
     end
 
     context 'when user add password too short' do
       before do
-        DatabaseCleaner.clean
-        visit '/users/sign_up'
-        fill_in 'user_name', with: 'Delbel'
-        fill_in 'user_email', with: 'del@bel.com'
+        signup_name_delbel
         fill_in 'user_password', with: '1234'
         fill_in 'user_password_confirmation', with: '1234'
         click_on 'commit'
@@ -59,10 +71,7 @@ RSpec.describe 'Users', type: :feature do
 
     context 'when user add wrong password confirmation' do
       before do
-        DatabaseCleaner.clean
-        visit '/users/sign_up'
-        fill_in 'user_name', with: 'Delbel'
-        fill_in 'user_email', with: 'del@bel.com'
+        signup_name_delbel
         fill_in 'user_password', with: '123456'
         fill_in 'user_password_confirmation', with: '12345'
         click_on 'commit'
@@ -79,12 +88,16 @@ RSpec.describe 'Users', type: :feature do
   end
 
   describe 'Sign In and Out' do
+    let(:create_and_fill_email){
+      DatabaseCleaner.clean
+      User.create(name: 'Delbel', email: 'del@bel.com', password: '123456', password_confirmation: '123456')
+      visit '/users/sign_in'
+      fill_in 'user_email', with: 'del@bel.com'    
+    }
+    
     context 'when user add valid inputs' do
       before do
-        DatabaseCleaner.clean
-        User.create(name: 'Delbel', email: 'del@bel.com', password: '123456', password_confirmation: '123456')
-        visit '/users/sign_in'
-        fill_in 'user_email', with: 'del@bel.com'
+        create_and_fill_email
         fill_in 'user_password', with: '123456'
         click_on 'commit'
       end
@@ -104,10 +117,7 @@ RSpec.describe 'Users', type: :feature do
 
     context 'when user add invalid inputs' do
       before do
-        DatabaseCleaner.clean
-        User.create(name: 'Delbel', email: 'del@bel.com', password: '123456', password_confirmation: '123456')
-        visit '/users/sign_in'
-        fill_in 'user_email', with: 'del@bel.com'
+        create_and_fill_email
         fill_in 'user_password', with: '1234'
         click_on 'commit'
       end
@@ -123,10 +133,7 @@ RSpec.describe 'Users', type: :feature do
 
     context 'when user signs out' do
       before do
-        DatabaseCleaner.clean
-        User.create(name: 'Delbel', email: 'del@bel.com', password: '123456', password_confirmation: '123456')
-        visit '/users/sign_in'
-        fill_in 'user_email', with: 'del@bel.com'
+        create_and_fill_email
         fill_in 'user_password', with: '123456'
         click_on 'commit'   
       end

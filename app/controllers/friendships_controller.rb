@@ -29,7 +29,7 @@ class FriendshipsController < ApplicationController
     @friendship.update(status: true)
     if @friendship.save
       flash[:notice] = 'You accepted the invitation'
-      render :index
+      redirect_to user_friends_path      
     else
       flash[:notice] = 'Something went wrong'
     end
