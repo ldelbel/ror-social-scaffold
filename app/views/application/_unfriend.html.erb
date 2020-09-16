@@ -1,4 +1,4 @@
-<% friendship = Friendship.find_by('friend1_id IN (?) AND friend2_id IN (?)', [@user.id, @current_user.id],[@user.id, @current_user.id])  %>
+<% friendship = Friendship.find_by('user_id IN (?) AND friend_id IN (?)', [@user.id, @current_user.id],[@user.id, @current_user.id])  %>
 
 <%= form_for friendship, url: user_friendship_path(user_id: @user.id, id: friendship.id), method: :delete do |t| -%>
     <%= t.hidden_field :id, value: friendship.id -%>

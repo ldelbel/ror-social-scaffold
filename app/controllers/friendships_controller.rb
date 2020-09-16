@@ -10,7 +10,7 @@ class FriendshipsController < ApplicationController
   end
 
   def create
-    @friendship_send_request = current_user.friendships_as_requester.create(friend2_id: params[:friend2_id], status: false)
+    @friendship_send_request = current_user.friendships.create(friend_id: params[:friend2_id], confirmed: false)
     if @friendship_send_request.save
       flash[:notice] = 'Invitation sent successfully'
     else
@@ -25,8 +25,9 @@ class FriendshipsController < ApplicationController
   
   def update
     @user = current_user
-    @friendship = @user.friendships_as_receiver.find(params[:id])
-    @friendship.update(status: true)
+    @friend = User.find(params[:id])
+    @user.confirm_friend(@friend)
+    @friendship = @user.inverse_friendships.find{|friendship| friendship.user == @friend}
     if @friendship.save
       flash[:notice] = 'You accepted the invitation'
       redirect_to user_friends_path      
@@ -37,7 +38,7 @@ class FriendshipsController < ApplicationController
 
   def destroy
     if params[:friendship][:operation].eql?('receive')
-      @friendship = current_user.friendships_as_receiver.find(params[:id])
+      @friendship = current_user.friend_requests.find(params[:id])
       @friendship.destroy
       if @friendship.destroy()
         flash[:alert] = 'You declined the invitation'
@@ -46,7 +47,7 @@ class FriendshipsController < ApplicationController
         flash[:notice] = 'Something went wrong'
       end
     elsif params[:friendship][:operation].eql?('send') 
-      @friendship = current_user.friendships_as_requester.find_by(friend1_id: current_user.id, friend2_id: params[:friendship][:friend2_id])
+      @friendship = current_user.friendships.where(confirmed: false).find_by(friend_id: params[:friendship][:friend2_id])
       @friendship.destroy
       if @friendship.destroy()
         flash[:alert] = 'You canceled the invitation'

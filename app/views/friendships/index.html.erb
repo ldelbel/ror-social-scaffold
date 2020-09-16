@@ -1,9 +1,9 @@
 <h2>Friend Requests</h2>
 
 <ul>
-<% @user.friendships_as_receiver.where(status: false).select do |friendship| %>
+<% @user.friend_requests.select do |friendship| %>
 
-<li><%= friendship.friend1.name %> wants to be your friend</li>
+<li><%= friendship.name %> wants to be your friend</li>
 
 <%= form_for friendship, url: user_friendship_path(user_id: @user.id, id: friendship.id), method: :put do |t| -%>
   <%= t.hidden_field :id, value: @user.id -%>
