@@ -38,12 +38,11 @@ class FriendshipsController < ApplicationController
   end
 
   def destroy
-    case 
-    when params[:user][:operation] == 'receive'
+    if params[:user][:operation] == 'receive'
       @friendship = current_user.inverse_friendships.where(confirmed: false).find_by(user_id: params[:user][:id])
       @friendship.destroy
       destroy_friendship(@friendship, 'You declined the invitation')
-    when params[:user][:operation] == 'send'
+    elsif params[:user][:operation] == 'send'
       @friendship = current_user.friendships.where(confirmed: false).find_by(friend_id: params[:user][:friend2_id])
       @friendship.destroy
       destroy_friendship(@friendship, 'You canceled the invitation')

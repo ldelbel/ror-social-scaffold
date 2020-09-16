@@ -7,7 +7,14 @@ DatabaseCleaner.clean
 RSpec.describe 'Friendship', type: :request do
   let(:signup) do
     get '/users/sign_up'
-    post '/users', params: { user: { name: 'Lucas', email: 'lucas@lucas.com', password: '123456', password_confirmation: '123456' } }
+    post '/users', params: {
+      user: {
+        name: 'Lucas',
+        email: 'lucas@lucas.com',
+        password: '123456',
+        password_confirmation: '123456'
+      }
+    }
   end
 
   let(:signin) do

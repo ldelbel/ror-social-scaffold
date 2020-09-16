@@ -35,6 +35,4 @@ module ApplicationHelper
       render partial: 'send_invitation'
     end
   end
-
-  
 end
