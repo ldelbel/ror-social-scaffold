@@ -1,29 +1,31 @@
 AllCops:
   Exclude:
+    - "db/**/*"
+    - "bin/*"
+    - "config/**/*"
     - "Guardfile"
     - "Rakefile"
-    - "bin/*"
-    - "app/**/*"
+    - "node_modules/**/*"
 
   DisplayCopNames: true
 
 Layout/LineLength:
-  Max: 160
+  Max: 120
 Metrics/MethodLength:
-  Max: 35
+  Include:
+    - "app/controllers/*"
+    - "app/models/*"
+  Max: 20
 Metrics/AbcSize:
-  Max: 62
+  Include:
+    - "app/controllers/*"
+    - "app/models/*"
+  Max: 50
 Metrics/ClassLength:
   Max: 150
 Metrics/BlockLength:
   ExcludedMethods: ["describe"]
-  Max: 50
-Metrics/CyclomaticComplexity:
-  Max: 20
-Metrics/PerceivedComplexity:
-  Max: 20
-Metrics/ModuleLength:
-  Max: 130
+  Max: 30
 
 Style/Documentation:
   Enabled: false
@@ -37,12 +39,6 @@ Style/DefWithParentheses:
   Enabled: false
 Style/FrozenStringLiteralComment:
   EnforcedStyle: never
-Style/IdenticalConditionalBranches:
-  Enabled: false
-Style/GlobalVars:
-  Enabled: false
-Style/GuardClause:
-  Enabled: false
 
 Layout/HashAlignment:
   EnforcedColonStyle: key
@@ -51,13 +47,14 @@ Layout/ExtraSpacing:
 Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
+Lint/RaiseException:
+  Enabled: false
+Lint/StructNewOverride:
+  Enabled: false
 Style/HashEachMethods:
   Enabled: false
 Style/HashTransformKeys:
   Enabled: false
 Style/HashTransformValues:
   Enabled: false
-GlobalVars:
-  AllowedVariables:
-    - redis
 # rubocop:disable Style/CaseEquality
