@@ -16,13 +16,13 @@ module ApplicationHelper
     end
   end
 
-  def friendship_button(user,friend)
+  def friendship_button(user, friend)
     @current_user = user
     @user = friend
     sent = Friendship.where(user_id: user.id, friend_id: friend.id)
     received = Friendship.where(user_id: friend.id, friend_id: user.id)
-    received_accepted = received.first.confirmed.eql?(true) if !received.empty?
-    sent_accepted = sent.first.confirmed.eql?(true) if !sent.empty?
+    received_accepted = received.first.confirmed.eql?(true) unless received.empty?
+    sent_accepted = sent.first.confirmed.eql?(true) unless sent.empty?
     if !sent.empty? && !sent_accepted && received.empty?
       render partial: 'cancel_invitation', locals: { user: @user }
     elsif !sent.empty? && sent_accepted && received.empty?
@@ -35,4 +35,6 @@ module ApplicationHelper
       render partial: 'send_invitation'
     end
   end
+
+  
 end

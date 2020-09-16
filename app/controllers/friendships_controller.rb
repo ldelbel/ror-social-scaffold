@@ -1,10 +1,11 @@
 class FriendshipsController < ApplicationController
+  include FriendshipsHelper
   before_action :authenticate_user!
-  
+
   def index
     @user = current_user
   end
-    
+
   def new
     @friendship = Friendship.new
   end
@@ -22,39 +23,30 @@ class FriendshipsController < ApplicationController
   def edit
     @user = current_user
   end
-  
+
   def update
     @user = current_user
     @friend = User.find(params[:id])
     @user.confirm_friend(@friend)
-    @friendship = @user.inverse_friendships.find{|friendship| friendship.user == @friend}
+    @friendship = @user.inverse_friendships.find { |friendship| friendship.user == @friend }
     if @friendship.save
       flash[:notice] = 'You accepted the invitation'
-      redirect_to user_friends_path      
+      redirect_to user_friends_path
     else
       flash[:notice] = 'Something went wrong'
     end
   end
 
   def destroy
-    if params[:friendship][:operation].eql?('receive')
-      @friendship = current_user.friend_requests.find(params[:id])
+    case 
+    when params[:user][:operation] == 'receive'
+      @friendship = current_user.inverse_friendships.where(confirmed: false).find_by(user_id: params[:user][:id])
       @friendship.destroy
-      if @friendship.destroy()
-        flash[:alert] = 'You declined the invitation'
-        redirect_to request.referrer
-      else
-        flash[:notice] = 'Something went wrong'
-      end
-    elsif params[:friendship][:operation].eql?('send') 
-      @friendship = current_user.friendships.where(confirmed: false).find_by(friend_id: params[:friendship][:friend2_id])
+      destroy_friendship(@friendship, 'You declined the invitation')
+    when params[:user][:operation] == 'send'
+      @friendship = current_user.friendships.where(confirmed: false).find_by(friend_id: params[:user][:friend2_id])
       @friendship.destroy
-      if @friendship.destroy()
-        flash[:alert] = 'You canceled the invitation'
-        redirect_to request.referrer 
-      else
-        flash[:notice] = 'Something went wrong'
-      end
+      destroy_friendship(@friendship, 'You canceled the invitation')
     else
       @friendship = Friendship.find(params[:id])
       @friendship.destroy
