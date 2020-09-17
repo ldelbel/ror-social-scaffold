@@ -15,4 +15,24 @@ module ApplicationHelper
       link_to('Like!', post_likes_path(post_id: post.id), method: :post)
     end
   end
+
+  def friendship_button(user, friend)
+    @current_user = user
+    @user = friend
+    sent = Friendship.where(user_id: user.id, friend_id: friend.id)
+    received = Friendship.where(user_id: friend.id, friend_id: user.id)
+    received_accepted = received.first.confirmed.eql?(true) unless received.empty?
+    sent_accepted = sent.first.confirmed.eql?(true) unless sent.empty?
+    if !sent.empty? && !sent_accepted && received.empty?
+      render partial: 'cancel_invitation', locals: { user: @user }
+    elsif !sent.empty? && sent_accepted && received.empty?
+      render partial: 'unfriend', locals: { user: @user, current_user: @current_user }
+    elsif !received.empty? && !received_accepted
+      render partial: 'check_request'
+    elsif !received.empty? && received_accepted
+      render partial: 'unfriend', locals: { user: @user, current_user: @current_user }
+    elsif sent.empty? && received.empty?
+      render partial: 'send_invitation'
+    end
+  end
 end
