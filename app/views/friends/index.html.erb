@@ -3,11 +3,11 @@
 <ul>
 <% @user_friends.each do |id| %>
   <% friend = User.find(id.id) %>
-  <% friendship = Friendship.find_by('user_id IN (?) AND friend_id IN (?)', [@user.id, id],[@user.id, id])  %>
+  <% friendship = Friendship.where('user_id IN (?) AND friend_id IN (?)', [@user.id, id],[@user.id, id])  %>
   <li><%= friend.name %></li>
 
-  <%= form_for @user, url: user_friendship_path(user_id: @user.id, id: friendship.id), method: :delete do |t| -%>
-    <%= t.hidden_field :id, value: friendship.id -%>
+  <%= form_for @user, url: user_friendship_path(user_id: @user.id, id: friend.id), method: :delete do |t| -%>
+    <%= t.hidden_field :friend_id, value: friend.id -%>
     <%= t.hidden_field :operation, value: 'none' -%>
     <%= t.submit 'Unfriend' -%>
   <%- end -%>
