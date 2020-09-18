@@ -8,7 +8,7 @@ class User < ApplicationRecord
 
   has_many :friendships
   has_many :inverse_friendships, foreign_key: 'friend_id', class_name: 'Friendship'
-  
+
   has_many :confirmed_friendships, -> { where confirmed: true }, class_name: 'Friendship'
   has_many :friends, through: :confirmed_friendships
 
@@ -17,13 +17,13 @@ class User < ApplicationRecord
 
   has_many :pending_requests, -> { where confirmed: false }, class_name: 'Friendship', foreign_key: 'friend_id'
   has_many :friend_requests, through: :pending_requests, source: :user
-  
+
   has_many :posts
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
 
   def confirm_friend(friend)
-    friendship = Friendship.find_by( user_id: friend, friend_id: id )
+    friendship = Friendship.find_by(user_id: friend, friend_id: id)
     friendship.confirmed = true
     friendship.save
     Friendship.create(user_id: id, friend_id: friend.id, confirmed: true)
