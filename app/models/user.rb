@@ -22,14 +22,28 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
 
-  def confirm_friend(friend)
-    friendship = Friendship.find_by(user_id: friend, friend_id: id)
-    friendship.confirmed = true
-    friendship.save
-    Friendship.create(user_id: id, friend_id: friend.id, confirmed: true)
+  def friends_and_own_posts
+    Post.where(user: (self.friends + [self]))
   end
 
-  def friend?(user)
-    friends.include?(user)
+  def find_friendship(user)
+    self.friendships.find_by(friend_id: user.id)
+  end
+
+  def find_received(friend_id)
+    inverse_friendships.where(confirmed: false).find_by(user_id: friend_id)
+  end
+
+  def find_sent(friend_id)
+    friendships.where(confirmed: false).find_by(friend_id: friend_id)
+  end
+
+  def delete_mutual_friendship(friend)
+    self.find_friendship(friend).destroy
+    friend.find_friendship(self).destroy    
+  end
+
+  def create_friendship(friend)
+    friendships.create(friend_id: friend, confirmed: false)
   end
 end
