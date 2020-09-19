@@ -4,7 +4,6 @@ class FriendshipsController < ApplicationController
 
   def index
     @user = current_user
-
   end
 
   def new
@@ -29,7 +28,7 @@ class FriendshipsController < ApplicationController
     @user = current_user
     @friend = User.find(params[:id])
     @friendship = @user.find_received(@friend.id)
-    @friendship.confirm_friend(@user,@friend)
+    @friendship.confirm_friend(@user, @friend)
     if @friendship.save
       flash[:notice] = 'You accepted the invitation'
       redirect_to user_friends_path

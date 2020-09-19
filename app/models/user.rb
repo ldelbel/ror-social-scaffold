@@ -23,11 +23,11 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy
 
   def friends_and_own_posts
-    Post.where(user: (self.friends + [self]))
+    Post.where(user: (friends + [self]))
   end
 
   def find_friendship(user)
-    self.friendships.find_by(friend_id: user.id)
+    friendships.find_by(friend_id: user.id)
   end
 
   def find_received(friend_id)
@@ -39,8 +39,8 @@ class User < ApplicationRecord
   end
 
   def delete_mutual_friendship(friend)
-    self.find_friendship(friend).destroy
-    friend.find_friendship(self).destroy    
+    find_friendship(friend).destroy
+    friend.find_friendship(self).destroy
   end
 
   def create_friendship(friend)
