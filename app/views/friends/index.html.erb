@@ -1,9 +1,7 @@
 <h2>Your Friends</h2>
 
 <ul>
-<% @user_friends.each do |id| %>
-  <% friend = User.find(id.id) %>
-  <% friendship = Friendship.where('user_id IN (?) AND friend_id IN (?)', [@user.id, id],[@user.id, id])  %>
+<% @user_friends.each do |friend| %>
   <li><%= friend.name %></li>
 
   <%= form_for @user, url: user_friendship_path(user_id: @user.id, id: friend.id), method: :delete do |t| -%>
