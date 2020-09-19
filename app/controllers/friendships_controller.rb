@@ -11,7 +11,7 @@ class FriendshipsController < ApplicationController
   end
 
   def create
-    @friendship_send_request = current_user.friendships.create(friend_id: params[:friend2_id], confirmed: false)
+    @friendship_send_request = current_user.create_friendship(params[:friend2_id])
     if @friendship_send_request.save
       flash[:notice] = 'Invitation sent successfully'
     else
@@ -27,8 +27,8 @@ class FriendshipsController < ApplicationController
   def update
     @user = current_user
     @friend = User.find(params[:id])
-    @user.confirm_friend(@friend)
-    @friendship = @user.inverse_friendships.find { |friendship| friendship.user == @friend }
+    @friendship = @user.find_received(@friend.id)
+    @friendship.confirm_friend(@user, @friend)
     if @friendship.save
       flash[:notice] = 'You accepted the invitation'
       redirect_to user_friends_path
@@ -39,16 +39,16 @@ class FriendshipsController < ApplicationController
 
   def destroy
     if params[:user][:operation] == 'receive'
-      @friendship = current_user.inverse_friendships.where(confirmed: false).find_by(user_id: params[:user][:id])
+      @friendship = current_user.find_received(params[:user][:id])
       @friendship.destroy
       destroy_friendship(@friendship, 'You declined the invitation')
     elsif params[:user][:operation] == 'send'
-      @friendship = current_user.friendships.where(confirmed: false).find_by(friend_id: params[:user][:friend2_id])
+      @friendship = current_user.find_sent(params[:user][:friend2_id])
       @friendship.destroy
       destroy_friendship(@friendship, 'You canceled the invitation')
     else
-      @friendship = Friendship.find(params[:id])
-      @friendship.destroy
+      @friend = User.find(params[:user][:friend_id])
+      current_user.delete_mutual_friendship(@friend)
       flash[:alert] = 'Unfriended Successfully'
       redirect_to request.referrer
     end

@@ -35,4 +35,16 @@ module ApplicationHelper
       render partial: 'send_invitation'
     end
   end
+
+  def your_friends_link
+    html = ''
+    html << "#{menu_link_to 'Your Friends', user_friends_path(current_user)} " if current_user
+    html.html_safe
+  end
+
+  def requests_link
+    html = ''
+    html << "#{menu_link_to 'Requests', user_friendships_path(current_user)} " if current_user
+    html.html_safe
+  end
 end
