@@ -4,12 +4,12 @@
 
 ## Built With
 
-- Ruby v2.7.0
-- Ruby on Rails v5.2.4
+- Ruby v2.7.1
+- Ruby on Rails v5.2.4.1
 
 ## Live Demo
 
-TBA
+[Live Link](https://vast-lake-43472.herokuapp.com/users/sign_in)
 
 
 ## Getting Started
@@ -18,11 +18,17 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-Ruby: 2.6.3
-Rails: 5.2.3
+Ruby: 2.7.1
+Rails: 5.2.4
 Postgres: >=9.5
 
 ### Setup
+
+```
+$ cd <folder>
+$ git clone git@github.com:ldelbel/ror-social-scaffold.git
+$ cd ror-social-scaffold
+```
 
 Instal gems with:
 
@@ -33,18 +39,15 @@ bundle install
 Setup database with:
 
 ```
-   rails db:create
-   rails db:migrate
+$ rails db:migrate
 ```
-
-
 
 ### Usage
 
 Start server with:
 
 ```
-    rails server
+$ rails server
 ```
 
 Open `http://localhost:3000/` in your browser.
@@ -52,10 +55,8 @@ Open `http://localhost:3000/` in your browser.
 ### Run tests
 
 ```
-    rpsec --format documentation
+ $ rspec
 ```
-
-> Tests will be added by Microverse students. There are no tests for initial features in order to make sure that students write all tests from scratch.
 
 ### Deployment
 
@@ -63,7 +64,12 @@ TBA
 
 ## Authors
 
-TBA
+👤 **Lucas Delbel**
+
+- Github: [@ldelbel](https://github.com/ldelbel)
+- Twitter: [@delbel_lucas](https://twitter.com/delbel_lucas)
+- Linkedin: [lucasdelbel](https://www.linkedin.com/in/lucasdelbel/)
+
 
 ## 🤝 Contributing
 
@@ -77,7 +83,7 @@ Give a ⭐️ if you like this project!
 
 ## Acknowledgments
 
-TBA
+- Microverse: [@microverse](https://www.microverse.org/)
 
 ## 📝 License
 

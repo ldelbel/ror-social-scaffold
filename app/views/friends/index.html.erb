@@ -1,0 +1,13 @@
+<h2>Your Friends</h2>
+
+<ul>
+<% @user_friends.each do |friend| %>
+  <li><%= friend.name %></li>
+
+  <%= form_for @user, url: user_friendship_path(user_id: @user.id, id: friend.id), method: :delete do |t| -%>
+    <%= t.hidden_field :friend_id, value: friend.id -%>
+    <%= t.hidden_field :operation, value: 'none' -%>
+    <%= t.submit 'Unfriend' -%>
+  <%- end -%>
+<% end %>
+</ul>

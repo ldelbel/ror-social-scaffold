@@ -1,0 +1,12 @@
+<h2>Friend Requests</h2>
+
+<% @user.friend_requests.pluck(:name) do |user| %>
+<li>
+<h4><%= user %> wants to be your friend</h4>
+  <%= form_for @user do |f| %>
+    <%= f.submit, 'Accept', user_friendships(@user), method: :post %>
+    <%= f.submit, 'Decline', user_friendships(@user), method: :delete %>
+  <% end %>
+</li>
+<% end %>
+

@@ -1,0 +1,4 @@
+<%= form_for @current_user, url: user_friendships_path(user_id: @current_user.id, friend2_id: @user.id), method: :post do |t| -%>
+    <%= t.hidden_field :friend2_id, value: @user.id -%>
+    <%= t.submit 'Send Invitation' -%>
+<%- end -%>
